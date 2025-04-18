@@ -1,4 +1,4 @@
-class Solution(object):
+class Solution():
     def isHappy(self, n):
         hset = set()
         while n != 1:

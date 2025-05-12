@@ -1,24 +1,22 @@
 class Solution:
     def findEvenNumbers(self, digits: List[int]) -> List[int]:
-        n = len(digits)
-        result = set()
-        
-        # Try every choice of 3 distinct positions i, j, k
-        for i in range(n):
-            d1 = digits[i]
-            if d1 == 0:               # leading zero → skip
+        cnt = Counter(digits)
+        evens = [d for d in cnt if d % 2 == 0]
+        res = set()
+
+        # a = hundreds place (≠0), b = tens place, c = ones place (even)
+        for a in cnt:
+            if a == 0:                   # no leading zero
                 continue
-            for j in range(n):
-                if j == i:
+            for b in cnt:
+                # need at least two of the same digit if a==b
+                if a == b and cnt[b] < 2:
                     continue
-                d2 = digits[j]
-                for k in range(n):
-                    if k == i or k == j:
-                        continue
-                    d3 = digits[k]
-                    if d3 % 2 != 0:    # must be even
-                        continue
-                    num = d1 * 100 + d2 * 10 + d3
-                    result.add(num)
-        
-        return sorted(result)
+                for c in evens:
+                    # build a small counter of how many times we use each digit
+                    need = Counter((a, b, c))
+                    # check availability
+                    if all(cnt[d] >= need[d] for d in need):
+                        res.add(100*a + 10*b + c)
+
+        return sorted(res)

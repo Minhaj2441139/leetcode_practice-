@@ -3,15 +3,12 @@ class Solution:
         # dp[i][j] = number of ways to reach cell (i,j)
         dp = [[0]*n for _ in range(m)]
         
-        # base cases: only one way along the top row and left column
+        dp[0][0]=1
+
         for i in range(m):
-            dp[i][0] = 1
-        for j in range(n):
-            dp[0][j] = 1
-        
-        # fill in the rest
-        for i in range(1, m):
-            for j in range(1, n):
-                dp[i][j] = dp[i-1][j] + dp[i][j-1]
-        
-        return dp[m-1][n-1]
+            for j in range(n):
+                if i>0:
+                    dp[i][j]+=dp[i-1][j]
+                if j>0:
+                    dp[i][j]+=dp[i][j-1]
+        return dp[-1][-1]
